@@ -430,7 +430,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-gray-200 sm:text-xl">
-              A luxury caravan and campervan rental funnel built for high-ticket, low-volume revenue across premium experiential travel, corporate outings, film shoots, political movement, ad agencies, luxury road trips and weekend tourism from Mumbai and Pune.
+              A luxury caravan and campervan experience designed for premium travel, corporate retreats, film shoots, agency activations, high-profile events and curated weekend escapes across Mumbai and Pune.
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -539,7 +539,7 @@ export default function Home() {
           <div className="grid gap-6 md:grid-cols-3">
             {[
               ["5-7 Years", "strong niche opportunity"],
-              ["Premium TG", "high-ticket, low-volume model"],
+              ["Premium TG", "curated bookings for luxury travellers"],
               ["Phase 2", "Maharashtra expansion focus"],
             ].map(([number, text]) => (
               <div
