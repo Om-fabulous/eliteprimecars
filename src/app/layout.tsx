@@ -13,8 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eliteprimecars",
-  description: "Eliteprimecars - Premium Car Sales",
+  title: "Elite Prime Cars",
+  description:
+    "Luxury caravan and premium travel rental experience for Maharashtra road trips, film productions, corporate offsites, and experiential hospitality.",
+  metadataBase: new URL("https://eliteprimecars.example"),
 };
 
 export default function RootLayout({
@@ -25,9 +27,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-black text-white`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-black text-white">{children}</body>
     </html>
   );
 }

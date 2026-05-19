@@ -1,6 +1,6 @@
 "use client";
 
-import { type SVGProps, useEffect } from "react";
+import { type SVGProps, useCallback, useEffect } from "react";
 import {
   Crown,
   BadgeCheck,
@@ -62,6 +62,134 @@ const marketAdvantages = [
   "Corporate offsites, professionals and leadership retreats",
   "Solo travellers, trekkers, seniors and pet-friendly travel",
 ];
+
+const fleetShowcase = [
+  {
+    name: "Luxury Caravan",
+    type: "Caravan",
+    capacity: "4-6 Guests",
+    image:
+      "https://images.unsplash.com/photo-1626680114529-3f6ffa002b80?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2FyYXZhbnxlbnwwfHwwfHx8MA%3D%3D",
+    description: "A very premium caravan experience with cinematic interiors, custom hospitality and private route designed for customers.",
+    features: ["Private lounge", "Ambient lighting", "Concierge service"],
+  },
+  {
+    name: "Campervan Elite",
+    type: "Campervan",
+    capacity: "2-4 Guests",
+    image:
+      "https://images.unsplash.com/photo-1655827268198-aee7f7ace729?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fENhbXBlcnZhbnxlbnwwfHwwfHx8MA%3D%3D",
+    description: "A luxurious intimate campervan crafted for elevated coastal escapes,  and unforgettable premium road journeys.",
+    features: ["Scenic roof", "Luxury bedding", "On-board minibar"],
+  },
+  {
+    name: "Executive Travel Van",
+    type: "TravelVan",
+    capacity: "6-8 Guests",
+    image:
+      "https://images.unsplash.com/photo-1552561018-5fea54c08479?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fEV4ZWN1dGl2ZSUyMFRyYXZlbCUyMFZhbnxlbnwwfHwwfHx8MA%3D%3D",
+    description: "Designed for VIP teams, corporate retreats and influencer travel with premium style.",
+    features: ["Executive seating", "Sound studio", "Mobile office"],
+  },
+  {
+    name: "Glamping Motorhome",
+    type: "Motorhome",
+    capacity: "4-6 Guests",
+    image:
+      "https://plus.unsplash.com/premium_photo-1676668605989-2969e187d012?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDV8fGNhbXBlcnZhbnxlbnwwfHwwfHx8MA%3D%3D",
+    description: "A seamless glamping suite that blends luxury mobile living with destination hospitality.",
+    features: ["Spa lounge", "Cinematic lighting", "Gourmet catering"],
+  },
+];
+
+function FleetCard({
+  product,
+}: {
+  product: {
+    name: string;
+    type: string;
+    capacity: string;
+    image: string;
+    description: string;
+    features: string[];
+  };
+}) {
+  const handleMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    card.style.setProperty("--tilt-x", `${x * 16}`);
+    card.style.setProperty("--tilt-y", `${y * 12}`);
+    card.style.setProperty("--pointer-x", `${50 + x * 30}%`);
+    card.style.setProperty("--pointer-y", `${50 + y * 30}%`);
+  }, []);
+
+  const handleLeave = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    const card = event.currentTarget;
+    card.style.setProperty("--tilt-x", "0");
+    card.style.setProperty("--tilt-y", "0");
+  }, []);
+
+  return (
+    <div
+      className="group relative flex h-full flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#080806]/85 shadow-[0_40px_120px_rgba(0,0,0,0.28)] ring-1 ring-white/5 transition duration-300 hover:-translate-y-1 hover:shadow-[0_45px_140px_rgba(212,175,55,0.28)] hover:ring-amber-200/20"
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{
+        transform: "perspective(1200px) rotateX(calc(var(--tilt-y, 0) * 1deg)) rotateY(calc(var(--tilt-x, 0) * 1deg))",
+      }}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--pointer-x,50%) var(--pointer-y,50%),rgba(255,215,0,0.18),transparent_36%)] opacity-0 transition duration-300 group-hover:opacity-100 pointer-events-none" />
+      <div className="relative overflow-hidden">
+        <div className="h-72 w-full overflow-hidden">
+          <img src={product.image} alt={product.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-6">
+          <div className="inline-flex rounded-full border border-white/10 bg-black/50 px-3 py-2 text-xs uppercase tracking-[0.22em] text-amber-100 backdrop-blur-xl">
+            {product.capacity}
+          </div>
+        </div>
+      </div>
+      <div className="flex h-full flex-col p-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <span className="rounded-full border border-amber-300/25 bg-amber-400/10 px-3 py-2 text-xs uppercase tracking-[0.22em] text-amber-100">
+              {product.type}
+            </span>
+            <div className="flex items-center gap-2 text-amber-300">
+              <Sparkles className="h-4 w-4" />
+              <span className="text-xs uppercase tracking-[0.22em] text-amber-100">Premium</span>
+            </div>
+          </div>
+          <h3 className="text-2xl font-bold text-white">{product.name}</h3>
+          <p className="text-sm leading-7 text-gray-300">{product.description}</p>
+          <div className="grid gap-2">
+            {product.features.map((feature) => (
+              <span key={feature} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs text-gray-200">
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+                {feature}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="mt-4 border-t border-white/10 pt-4 text-xs uppercase tracking-[0.24em] text-amber-200/90">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="inline-flex items-center rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-[11px] font-medium text-amber-100">
+              On-demand concierge
+            </span>
+            <span className="text-amber-200/90">Cinematic route-ready</span>
+          </div>
+        </div>
+        <button className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-[#d7b94a] px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-black shadow-[0_22px_70px_rgba(212,175,55,0.24)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(255,215,0,0.32)]">
+          Explore
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 const markets = [
   {
@@ -323,6 +451,90 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="relative z-10 grid gap-10 bg-[#060606]/90 px-6 py-14 sm:px-10 lg:px-16">
+          <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[#090909]/95 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.26)] backdrop-blur-3xl">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,215,0,0.12),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.04),transparent_28%)]" />
+            <div className="relative grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-3 rounded-full border border-amber-300/20 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.35em] text-amber-100 backdrop-blur-xl">
+                  <Sparkles className="h-4 w-4 text-amber-300" />
+                  Check Availability
+                </div>
+                <h2 className="text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">
+                  Reserve your premium caravan journey now.
+                </h2>
+                <p className="max-w-xl text-base leading-8 text-gray-300">
+                  Select your route, dates and guests to secure one of our limited luxury vehicles. Every journey is designed with cinematic detail and private comfort.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="rounded-[24px] border border-white/10 bg-black/40 p-5">
+                    <p className="text-sm uppercase tracking-[0.28em] text-amber-200/80">Limited Availability</p>
+                    <p className="mt-4 text-3xl font-bold text-white">50+</p>
+                  </div>
+                  <div className="rounded-[24px] border border-white/10 bg-black/40 p-5">
+                    <p className="text-sm uppercase tracking-[0.28em] text-amber-200/80">Satisfied Clients</p>
+                    <p className="mt-4 text-3xl font-bold text-white">2417</p>
+                  </div>
+                  <div className="rounded-[24px] border border-white/10 bg-black/40 p-5">
+                    <p className="text-sm uppercase tracking-[0.28em] text-amber-200/80">Premium Routes</p>
+                    <p className="mt-4 text-3xl font-bold text-white">24/7</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#070707]/90 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.24)]">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80" />
+                <div className="relative space-y-6">
+                  <div className="rounded-[24px] bg-black/50 p-5 text-sm text-gray-200">
+                    <p className="font-semibold uppercase tracking-[0.28em] text-amber-200">Premium booking</p>
+                    <p className="mt-2 text-gray-300">Fast availability checks for luxury routes and vehicles.</p>
+                  </div>
+                  <form className="grid gap-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="block text-sm text-gray-300">
+                        Pickup city
+                        <select className="mt-2 w-full rounded-3xl border border-white/10 bg-[#080808]/90 px-4 py-3 text-white outline-none shadow-inner shadow-black/10">
+                          <option>Mumbai</option>
+                          <option>Pune</option>
+                          <option>Nashik</option>
+                          <option>Alibaug</option>
+                        </select>
+                      </label>
+                      <label className="block text-sm text-gray-300">
+                        Pickup date
+                        <input type="date" className="mt-2 w-full rounded-3xl border border-white/10 bg-[#080808]/90 px-4 py-3 text-white outline-none" />
+                      </label>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="block text-sm text-gray-300">
+                        Return date
+                        <input type="date" className="mt-2 w-full rounded-3xl border border-white/10 bg-[#080808]/90 px-4 py-3 text-white outline-none" />
+                      </label>
+                      <label className="block text-sm text-gray-300">
+                        Travel party
+                        <select className="mt-2 w-full rounded-3xl border border-white/10 bg-[#080808]/90 px-4 py-3 text-white outline-none">
+                          <option>2 guests</option>
+                          <option>4 guests</option>
+                          <option>6 guests</option>
+                          <option>8 guests</option>
+                        </select>
+                      </label>
+                    </div>
+                    <button type="button" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-[#d7b94a] px-6 py-4 text-sm font-semibold uppercase tracking-[0.25em] text-black shadow-[0_20px_70px_rgba(212,175,55,0.28)] transition hover:shadow-[0_30px_90px_rgba(255,215,0,0.32)]">
+                      Check availability
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </form>
+                  <div className="rounded-[24px] border border-white/10 bg-black/45 p-4 text-sm text-gray-300">
+                    <p className="font-medium text-gray-100">Need a quote instead?</p>
+                    <p className="mt-2">Message us directly and we’ll tailor an exact itinerary for your luxury travel plan.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="relative z-10 bg-gradient-to-b from-[#080808] via-[#111] to-black px-6 py-20 sm:px-10 lg:px-16">
           <div className="grid gap-6 md:grid-cols-3">
             {[
@@ -419,6 +631,39 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        <section className="relative z-10 bg-[#030303]/95 px-6 py-20 sm:px-10 lg:px-16">
+          <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[#090909]/90 px-6 py-10 shadow-[0_45px_120px_rgba(0,0,0,0.44)] backdrop-blur-3xl sm:px-10 sm:py-14">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,215,0,0.14),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.04),transparent_28%)]" />
+            <div className="relative z-10 grid gap-10">
+              <div className="grid gap-4 sm:grid-cols-[0.9fr_1.1fr] sm:items-end">
+                <div>
+                  <p className="mb-4 text-sm font-semibold uppercase tracking-[0.35em] text-amber-200/80">Premium Fleet Showcase</p>
+                  <h2 className="text-4xl font-black tracking-[-0.03em] text-white sm:text-5xl">
+                    Luxury travel products, caravans and cinematic road experiences.
+                  </h2>
+                </div>
+                <p className="text-sm leading-7 text-gray-300 sm:text-base">
+                  Discover a premium marketplace of mobile travel suites, glamping vehicles and executive camper experiences designed for high-end journeys.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <button className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-[#d7b94a] px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-black shadow-[0_24px_80px_rgba(212,175,55,0.22)] transition hover:shadow-[0_32px_96px_rgba(255,215,0,0.28)]">
+                  View all products
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+                <p className="text-sm text-gray-400">4 premium vehicles selected for cinematic luxury travel.</p>
+              </div>
+              <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2 items-stretch">
+                {fleetShowcase.map((product) => (
+                  <div key={product.name} className="funnel-reveal h-full">
+                    <FleetCard product={product} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         <div className="relative z-10 bg-[#090909] px-6 py-20 sm:px-10 lg:px-16">
           <div className="funnel-reveal mx-auto mb-12 max-w-3xl text-center">
